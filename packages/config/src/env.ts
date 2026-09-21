@@ -1,0 +1,3 @@
+import { z } from 'zod';
+export const envSchema = z.object({ DATABASE_URL: z.string().url(), NEXT_PUBLIC_SUPABASE_URL: z.string().url(), NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(), NEXT_PUBLIC_MAPBOX_TOKEN: z.string().optional(), XENDIT_SECRET_KEY: z.string().optional(), XENDIT_PUBLIC_KEY: z.string().optional(), WHATSAPP_ACCESS_TOKEN: z.string().optional(), WHATSAPP_PHONE_NUMBER_ID: z.string().optional(), OPENAI_API_KEY: z.string().optional(), GEMINI_API_KEY: z.string().optional(), OSRM_URL: z.string().default('http://localhost:5000'), NODE_ENV: z.enum(['development', 'production', 'test']).default('development') });
+export const env = envSchema.parse(process.env);

@@ -1,0 +1,14 @@
+.\opencode-fallback.ps1 -task backend -prompt "Buat workflow untuk user authentication"
+.\opencode-fallback.ps1 -task schema -prompt "Generate schema.json"
+.\opencode-fallback.ps1 -task marketing -prompt "Write promotional text"
+
+.\opencode-fallback.ps1 -task backend -prompt "Buat workflow untuk user authentication"
+
+
+.\opencode-fallback.ps1 -continue -prompt "Lanjutkan pembuatannya sampai selesai"
+
+.\opencode-fallback.ps1 -prompt "Lanjutkan"
+
+# Yang tepat jika tanpa -continue (sebutkan konteks/file tujuan)
+
+.\opencode-fallback.ps1 -prompt "Lanjutkan penulisan fungsi auth pada file backend/auth.ts yang belum selesai"

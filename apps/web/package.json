@@ -1,0 +1,47 @@
+{
+  "name": "@bali-car-charter/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "next": "14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@bali-car-charter/ui": "*",
+    "@bali-car-charter/config": "*",
+    "@bali-car-charter/shared": "*",
+    "@bali-car-charter/database": "*",
+    "@bali-car-charter/api": "*",
+    "next-intl": "^3.11.0",
+    "@tanstack/react-query": "^5.28.0",
+    "zustand": "^4.5.0",
+    "date-fns": "^3.6.0",
+    "date-fns-tz": "^2.0.0",
+    "mapbox-gl": "^3.2.0",
+    "@supabase/supabase-js": "^2.42.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/mapbox-gl": "^3.1.0",
+    "typescript": "^5.4.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.0",
+    "vitest": "^1.5.0",
+    "@testing-library/react": "^14.2.0",
+    "@testing-library/jest-dom": "^6.4.0",
+    "jsdom": "^24.0.0"
+  }
+}

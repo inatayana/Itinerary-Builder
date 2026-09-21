@@ -1,0 +1,412 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  FLEET_MANAGER
+  DRIVER
+  TRAVELER
+  GUEST
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIAL
+}
+
+enum VehicleCategory {
+  SEDAN
+  SUV
+  MPV
+  MINIBUS
+  BUS
+  LUXURY_SEDAN
+  LUXURY_SUV
+}
+
+enum ZoneType {
+  URBAN
+  SUBURBAN
+  RURAL
+  MOUNTAIN
+  HIGHWAY
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  phone         String?   @unique
+  name          String?
+  avatarUrl     String?
+  role          UserRole  @default(TRAVELER)
+  isActive      Boolean   @default(true)
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+    bookings      Booking[]
+    driverProfile Driver?
+    addresses     Address[]
+    itineraries   Itinerary[]
+}
+
+model Driver {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  licenseNumber   String   @unique
+  licenseExpiry   DateTime
+  vehicleId       String?  @unique
+  vehicle         Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  rating          Float    @default(5.0)
+  totalTrips      Int      @default(0)
+  isAvailable     Boolean  @default(true)
+  isVerified      Boolean  @default(false)
+  currentLat      Float?
+  currentLng      Float?
+  lastLocationUpdate DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  bookings        Booking[]
+  assignments     DriverAssignment[]
+  earnings        DriverEarning[]
+  zones           DriverZone[]
+}
+
+model Vehicle {
+  id              String        @id @default(cuid())
+  category        VehicleCategory
+  brand           String
+  model           String
+  year            Int
+  plateNumber     String        @unique
+  color           String
+  capacity        Int
+  luggageCapacity Int
+  acType          String
+  features        String[]
+  dailyRate       Int
+  hourlyRate      Int
+  overtimeRate    Int
+  driverId        String?       @unique
+    driver          Driver?      @relation
+  zoneId          String?
+  zone            Zone?         @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  isActive        Boolean       @default(true)
+  gpsDeviceId     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  bookings        Booking[]
+  maintenance     Maintenance[]
+}
+
+model Zone {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  type        ZoneType
+  province    String
+  regency     String
+  district    String
+  village     String?
+  centerLat   Float
+  centerLng   Float
+  radiusKm    Float       @default(10)
+  trafficMultiplier Float @default(1.0)
+  parentId    String?
+  parent      Zone?       @relation("ZoneHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Zone[]      @relation("ZoneHierarchy")
+  isActive    Boolean     @default(true)
+  sortOrder   Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  vehicles    Vehicle[]
+  destinations Destination[]
+  driverZones DriverZone[]
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  address     String?
+  lat         Float
+  lng         Float
+  category    String
+  tags        String[]
+  images      String[]
+  zoneId      String
+  zone        Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  visitDuration Int   @default(60)
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  priceRange  String?
+  openingHours Json?
+  isActive    Boolean  @default(true)
+  seoTitle    String?
+  seoDescription String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  itineraryItems ItineraryItem[]
+}
+
+model Itinerary {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  startDate       DateTime
+  endDate         DateTime
+  startLocation   String?
+  startLat        Float?
+  startLng        Float?
+  totalDistance   Float    @default(0)
+  totalDuration   Int      @default(0)
+  totalPrice      Int      @default(0)
+  status          String   @default("DRAFT")
+  isPublic        Boolean  @default(false)
+  shareToken      String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items           ItineraryItem[]
+  bookings        Booking[]
+}
+
+model ItineraryItem {
+  id              String   @id @default(cuid())
+  itineraryId     String
+  itinerary       Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  destinationId   String
+  destination     Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  dayNumber       Int
+  orderIndex      Int
+  startTime       DateTime?
+  endTime         DateTime?
+  travelTime      Int?
+  distanceKm      Float?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Booking {
+  id              String       @id @default(cuid())
+  bookingNumber   String       @unique
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itineraryId     String?
+  itinerary       Itinerary?   @relation(fields: [itineraryId], references: [id], onDelete: SetNull)
+  vehicleId       String
+  vehicle         Vehicle      @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  driverId        String?
+  driver          Driver?      @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  status          BookingStatus @default(PENDING)
+  startDate       DateTime
+  endDate         DateTime
+  pickupLocation  String
+  pickupLat       Float
+  pickupLng       Float
+  dropoffLocation String?
+  dropoffLat      Float?
+  dropoffLng      Float?
+  passengerCount  Int
+  luggageCount    Int
+  specialRequests String?
+  basePrice       Int
+  overtimePrice   Int          @default(0)
+  discountAmount  Int          @default(0)
+  totalPrice      Int
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentId       String?
+  confirmedAt     DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  cancelledAt     DateTime?
+  cancellationReason String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  payments        Payment[]
+  driverAssignment DriverAssignment?
+  review          Review?
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  bookingId       String
+  booking         Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  xenditInvoiceId String?  @unique
+  amount          Int
+  currency        String   @default("IDR")
+  status          PaymentStatus
+  method          String?
+  paidAt          DateTime?
+  expiredAt       DateTime?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model DriverAssignment {
+  id              String   @id @default(cuid())
+  bookingId       String   @unique
+  booking         Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  driverId        String
+  driver          Driver   @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  assignedAt      DateTime @default(now())
+  acceptedAt      DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  status          String   @default("ASSIGNED")
+  notes           String?
+}
+
+model DriverEarning {
+  id              String   @id @default(cuid())
+  driverId        String
+  driver          Driver   @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  bookingId       String?
+  amount          Int
+  type            String
+  description     String?
+  status          String   @default("PENDING")
+  paidAt          DateTime?
+  createdAt       DateTime @default(now())
+}
+
+model DriverZone {
+  id        String @id @default(cuid())
+  driverId  String
+  driver    Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  zoneId    String
+  zone      Zone   @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  isPrimary Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([driverId, zoneId])
+}
+
+model Maintenance {
+  id          String   @id @default(cuid())
+  vehicleId   String
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  type        String
+  description String?
+  cost        Int
+  startDate   DateTime
+  endDate     DateTime?
+  status      String   @default("SCHEDULED")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  bookingId   String   @unique
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  userId      String
+  driverId    String?
+  rating      Int
+  comment     String?
+  createdAt   DateTime @default(now())
+}
+
+model Address {
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label     String
+  address   String
+  lat       Float
+  lng       Float
+  isDefault Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+
+model WhatsAppTemplate {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  category    String
+  language    String   @default("id")
+  headerText  String?
+  bodyText    String
+  footerText  String?
+  buttons     Json?
+  status      String   @default("APPROVED")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WhatsAppConversation {
+  id              String             @id @default(cuid())
+  phoneNumber     String
+  userId          String?
+  status          String             @default("OPEN")
+  lastMessageAt   DateTime           @default(now())
+  metadata        Json?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  messages        WhatsAppMessage[]
+}
+
+model WhatsAppMessage {
+  id              String   @id @default(cuid())
+  conversationId  String
+  conversation    WhatsAppConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  messageId       String   @unique
+  direction       String
+  type            String
+  content         String
+  mediaUrl        String?
+  status          String   @default("SENT")
+  metadata        Json?
+  createdAt       DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  entity      String
+  entityId    String
+  oldData     Json?
+  newData     Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  description String?
+  updatedAt DateTime @updatedAt
+}
