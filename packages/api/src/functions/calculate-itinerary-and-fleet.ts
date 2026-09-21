@@ -80,9 +80,9 @@ export async function calculate_itinerary_and_fleet(input: {
   });
 
   const recommendedCategory = relevantCategories[0]?.name ?? 'Premium MPV Charter';
-  const rate = FCS_RATE_BY_CATEGORY[recommendedCategory] ?? { standard: 1400000, weekend: 1800000 };
+  const rate = FCS_RATE_BY_CATEGORY[recommendedCategory] ?? { baseRate: 1400000, weekendRate: 1800000 };
   const isWeekend = [0, 6].includes(new Date(input.travel_date).getDay());
-  const baseRate = isWeekend ? rate.weekend : rate.standard;
+  const baseRate = isWeekend ? rate.weekendRate : rate.baseRate;
 
   return {
     status: 'SUCCESS',
@@ -98,7 +98,7 @@ export async function calculate_itinerary_and_fleet(input: {
     },
     recommendedFleet: {
       category: recommendedCategory,
-      models: FCS_CATEGORIES.find(c => c.name === recommendedCategory)?.models ?? [],
+      models: (FCS_CATEGORIES.find(c => c.name === recommendedCategory)?.models ?? []) as string[],
       reason: `Kapasitas ${pax} Pax + ${input.luggage.large_suitcases} Koper Besar cocok dengan standar FCS v1.0 ${recommendedCategory}.`,
       vehicleSpec: {
         seatingCapacity: FCS_CAPACITY_BY_CATEGORY[recommendedCategory]?.passengers ?? 6,

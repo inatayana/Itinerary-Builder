@@ -14,13 +14,14 @@
     "noEmit": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@bali-car-charter/ui": ["packages/ui/src"],
-      "@bali-car-charter/config": ["packages/config/src"],
-      "@bali-car-charter/database": ["packages/database/src"],
-      "@bali-car-charter/shared": ["packages/shared/src"],
-      "@bali-car-charter/api": ["packages/api/src"]
+      "@bali-car-charter/ui": ["./packages/ui/src"],
+      "@bali-car-charter/config": ["./packages/config/src"],
+      "@bali-car-charter/database": ["./packages/database/src"],
+      "@bali-car-charter/shared": ["./packages/shared/src"],
+      "@bali-car-charter/api": ["./packages/api/src"]
     }
   },
   "exclude": ["node_modules", "**/dist/**", "**/.next/**", "**/build/**"]

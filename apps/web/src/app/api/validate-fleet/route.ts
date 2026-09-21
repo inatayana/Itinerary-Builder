@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json() as { pax: number; luggage: { large_suitcases: number; cabin_bags: number }; fleet_category: string; zone: string; duration_hours: number };
     const result = await validateFleetAgainstFCS(body);
     return NextResponse.json(result);
   } catch (error) {

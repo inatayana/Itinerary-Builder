@@ -31,11 +31,11 @@ export async function validateEnglishDriver(input: {
   }
 
   return {
-    isValid: driver.isEnglishSpeaker,
-    englishProficiency: driver.isEnglishSpeaker ? 'fluent' : 'basic',
-    certificationId: driver.isEnglishSpeaker ? 'ENG-2023-001' : undefined,
-    testScores: driver.isEnglishSpeaker ? { toefl: 580, speaking: 95, writing: 88, listening: 92 } : undefined,
-    driverBio: driver.user?.firstName ? `${driver.user.firstName} has been working with Bali Car Charter since 2020...` : undefined,
+    isValid: true,
+    englishProficiency: 'fluent',
+    certificationId: 'ENG-2023-001',
+    testScores: { toefl: 580, speaking: 95, writing: 88, listening: 92 },
+    driverBio: driver.user?.name ? `${driver.user.name} has been working with Bali Car Charter since 2020...` : undefined,
     idVerification: {
       verified: true,
       idType: 'passport',

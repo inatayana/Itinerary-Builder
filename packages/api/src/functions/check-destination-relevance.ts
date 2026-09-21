@@ -21,7 +21,7 @@ export async function checkDestinationRelevance(input: {
     reason: string;
   }>;
 }> {
-  const destination = await prisma.destinations.findUnique({
+  const destination = await prisma.destination.findUnique({
     where: { id: input.destination_id },
   });
 
@@ -43,7 +43,7 @@ export async function checkDestinationRelevance(input: {
     relevanceScore: Math.round(relevanceScore * 100) / 100,
     reason: `Matches traveler interests in ${input.traveler_preferences.interests.join(', ')}`,
     recommendedOrder: 1,
-    estimatedVisitTime: destination.visitTimeMinutes ?? 120,
+    estimatedVisitTime: destination.visitDuration ?? 120,
     alternativeDestinations: [],
   };
 }

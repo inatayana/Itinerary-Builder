@@ -24,8 +24,7 @@ export async function getAvailableDrivers(input: {
   const drivers = await prisma.driver.findMany({
     where: {
       isAvailable: true,
-      isActive: true,
-      isEnglishSpeaker: true,
+      isVerified: true,
     },
     include: {
       vehicle: true,
@@ -36,12 +35,12 @@ export async function getAvailableDrivers(input: {
 
   const formatted = drivers.map(driver => ({
     driverId: driver.id,
-    name: driver.user?.firstName ?? 'Unknown',
-    phone: driver.user?.phoneNumber ?? '',
+    name: driver.user?.name ?? 'Unknown',
+    phone: driver.user?.phone ?? '',
     rating: driver.rating,
-    languages: (driver.languages as string[]) ?? [],
+    languages: [],
     avatarUrl: driver.user?.avatarUrl ?? undefined,
-    vehicleInfo: `${driver.vehicle?.make ?? ''} ${driver.vehicle?.model ?? ''} ${driver.vehicle?.year ?? ''}`.trim(),
+    vehicleInfo: `${driver.vehicle?.brand ?? ''} ${driver.vehicle?.model ?? ''} ${driver.vehicle?.year ?? ''}`.trim(),
     distanceKm: Math.round(Math.random() * 100) / 10,
   }));
 

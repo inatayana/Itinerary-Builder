@@ -17,14 +17,14 @@ export async function validateDriverSchedule(input: {
     end: string;
   }>;
 }> {
-  const bookings = await prisma.bookings.findMany({
+  const bookings = await prisma.booking.findMany({
     where: {
       driverId: input.driver_id,
-      scheduledStartTime: {
+      startDate: {
         gte: new Date(input.date + 'T00:00:00'),
         lt: new Date(input.date + 'T23:59:59'),
       },
-      status: { notIn: ['cancelled', 'completed'] },
+      status: { notIn: ['CANCELLED', 'COMPLETED'] },
     },
   });
 
@@ -33,8 +33,8 @@ export async function validateDriverSchedule(input: {
       isValid: false,
       conflicts: bookings.map(b => ({
         bookingId: b.id,
-        startTime: b.scheduledStartTime.toISOString(),
-        endTime: b.scheduledEndTime.toISOString(),
+        startTime: b.startDate.toISOString(),
+        endTime: b.endDate.toISOString(),
         reason: 'Driver already has a booking during this time',
       })),
     };
