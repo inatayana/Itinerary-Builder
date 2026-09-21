@@ -1,0 +1,46 @@
+# {
+#   "buildCommand": "pnpm run build",
+#   "devCommand": "pnpm run dev",
+#   "installCommand": "pnpm install",
+#   "framework": "nextjs",
+#   "regions": ["iad1", "sin1"],
+#   "env": {
+#     "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
+#     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
+#     "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN": "@next_public_mapbox_access_token",
+#     "XENDIT_API_KEY": "@xendit_api_key",
+#     "GEMINI_API_KEY": "@gemini_api_key"
+#   },
+#   "functions": {
+#     "apps/web/**/*.ts": {
+#       "maxDuration": 10,
+#       "memory": 1024
+#     }
+#   },
+#   "crons": [
+#     {
+#       "path": "/api/scheduled/cleanup",
+#       "schedule": "0 0 * * *"
+#     }
+#   ]
+# }
+{
+  "buildCommand": "pnpm run build",
+  "devCommand": "pnpm run dev",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "regions": ["iad1", "sin1"],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
+    "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN": "@next_public_mapbox_access_token",
+    "XENDIT_API_KEY": "@xendit_api_key",
+    "GEMINI_API_KEY": "@gemini_api_key"
+  },
+  "functions": {
+    "apps/web/**/*.ts": {
+      "maxDuration": 10,
+      "memory": 1024
+    }
+  }
+}
