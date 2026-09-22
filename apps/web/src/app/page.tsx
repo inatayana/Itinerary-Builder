@@ -1,24 +1,17 @@
-'use client';
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
 
-import { useState } from 'react';
-import { Button } from '@bali-car-charter/ui';
+export default async function Page() {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
 
-export default function HomePage() {
-  const [loading, setLoading] = useState(false);
+  const { data: todos } = await supabase.from('todos').select()
 
   return (
-    <main className="min-h-screen bg-surface p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-primary-900 mb-4">
-          Selamat Datang di Bali Car Charter
-        </h1>
-        <p className="text-lg text-gray-600 mb-8">
-          Platform transportasi dengan pengemudi fasih berbahasa Inggris
-        </p>
-        <Button onClick={() => { setLoading(true); setTimeout(() => setLoading(false), 1000); }}>
-          {loading ? 'Loading...' : 'Mulai Petualangan'}
-        </Button>
-      </div>
-    </main>
-  );
+    <ul>
+      {todos?.map((todo: { id: string; name: string }) => (
+        <li key={todo.id}>{todo.name}</li>
+      ))}
+    </ul>
+  )
 }
