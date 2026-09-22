@@ -5,9 +5,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  NODE_VERSION: '20'
-
 jobs:
   # ===== LINT & TYPECHECK =====
   lint-and-typecheck:
@@ -21,21 +18,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Lint
-        run: pnpm run lint --filter=${{ matrix.workspace }}
+        run: npx turbo run lint --filter=${{ matrix.workspace }}
 
       - name: TypeCheck
-        run: pnpm run typecheck --filter=${{ matrix.workspace }}
+        run: npx turbo run typecheck --filter=${{ matrix.workspace }}
 
   # ===== TEST =====
   test:
@@ -49,18 +42,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Run tests
-        run: pnpm run test --filter=${{ matrix.workspace }}
+        run: npx turbo run test --filter=${{ matrix.workspace }}
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -81,18 +70,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Build
-        run: pnpm run build --filter=${{ matrix.workspace }}
+        run: npx turbo run build --filter=${{ matrix.workspace }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -112,15 +97,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -144,18 +125,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Build
-        run: pnpm run build --workspace=web
+        run: npx turbo run build --workspace=web
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -178,21 +155,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9.0.0 --activate
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Generate Prisma Client
-        run: cd packages/database && pnpm run db:generate
+        run: cd packages/database && npm run db:generate
 
       - name: Push Schema to Supabase
-        run: cd packages/database && pnpm run db:push
+        run: cd packages/database && npm run db:push
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
