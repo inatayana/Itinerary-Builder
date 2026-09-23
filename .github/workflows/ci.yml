@@ -23,8 +23,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Lint
         run: npx turbo run lint --filter=${{ matrix.workspace }}
@@ -49,8 +49,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Run tests
         run: npx turbo run test --filter=${{ matrix.workspace }}
@@ -79,8 +79,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Build
         run: npx turbo run build --filter=${{ matrix.workspace }}
@@ -108,8 +108,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -138,8 +138,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Build
         run: npx turbo run build --workspace=web
@@ -170,8 +170,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -x
-          npm install --legacy-peer-deps 2>&1 || true
+          set -e
+          npm install --legacy-peer-deps 2>&1
 
       - name: Generate Prisma Client
         run: cd packages/database && npm run db:generate
