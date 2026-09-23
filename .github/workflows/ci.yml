@@ -19,19 +19,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: npx turbo run lint --filter=${{ matrix.workspace }}
+        run: pnpm run lint --filter=${{ matrix.workspace }}
 
       - name: TypeCheck
-        run: npx turbo run typecheck --filter=${{ matrix.workspace }}
+        run: pnpm run typecheck --filter=${{ matrix.workspace }}
 
   # ===== TEST =====
   test:
@@ -46,16 +45,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npx turbo run test --filter=${{ matrix.workspace }}
+        run: pnpm run test --filter=${{ matrix.workspace }}
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -77,16 +75,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: npx turbo run build --filter=${{ matrix.workspace }}
+        run: pnpm run build --filter=${{ matrix.workspace }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -107,13 +104,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -138,16 +134,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: npx turbo run build --workspace=web
+        run: pnpm run build --workspace=web
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -171,13 +166,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        run: npm install -g pnpm@9 && echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma Client
         run: cd packages/database && pnpm run db:generate
