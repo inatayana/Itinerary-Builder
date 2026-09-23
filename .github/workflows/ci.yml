@@ -22,7 +22,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
@@ -49,7 +49,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
@@ -80,7 +80,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
@@ -110,7 +110,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
@@ -141,7 +141,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
@@ -174,7 +174,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup pnpm
-        run: corepack prepare pnpm@9.0.0 --activate && corepack enable pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
