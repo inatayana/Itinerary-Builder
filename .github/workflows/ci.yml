@@ -19,12 +19,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Lint
         run: npx turbo run lint --filter=${{ matrix.workspace }}
@@ -45,12 +46,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Run tests
         run: npx turbo run test --filter=${{ matrix.workspace }}
@@ -75,12 +77,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Build
         run: npx turbo run build --filter=${{ matrix.workspace }}
@@ -104,12 +107,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -134,12 +138,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Build
         run: npx turbo run build --workspace=web
@@ -166,18 +171,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: corepack enable pnpm
 
       - name: Install dependencies
-        run: |
-          set -e
-          npm install --legacy-peer-deps 2>&1
+        run: pnpm install
 
       - name: Generate Prisma Client
-        run: cd packages/database && npm run db:generate
+        run: cd packages/database && pnpm run db:generate
 
       - name: Push Schema to Supabase
-        run: cd packages/database && npm run db:push
+        run: cd packages/database && pnpm run db:push
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
