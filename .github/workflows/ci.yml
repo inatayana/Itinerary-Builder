@@ -18,11 +18,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Lint
         run: npx turbo run lint --filter=${{ matrix.workspace }}
@@ -42,11 +42,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Run tests
         run: npx turbo run test --filter=${{ matrix.workspace }}
@@ -70,11 +70,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npx turbo run build --filter=${{ matrix.workspace }}
@@ -97,11 +97,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -125,11 +125,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npx turbo run build --workspace=web
@@ -155,11 +155,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Generate Prisma Client
         run: cd packages/database && npm run db:generate
